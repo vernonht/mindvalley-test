@@ -1,6 +1,10 @@
 <script setup>
   import image from "../assets/Mega Man Zero 2.png"
-  import {ref} from 'vue'
+  import {ref, onMounted, watch} from 'vue'
+  import { useRoute } from 'vue-router';
+  import router from '../router'
+
+  let route = useRoute();
 
   const selected = ref(null)
   const sidebarList = [
@@ -25,6 +29,21 @@
     {size: "-806px -375px"},
     {size: "-1072px -375px"},
   ]
+
+  const selectProduct = (key) => {
+    selected.value = key
+    router.push(`/${key !== null ? key : ''}`)
+  }
+  
+  onMounted(() => {
+    if(route.params?.id) selected.value = route.params?.id
+  })
+
+  watch(() => route.params, () => {
+    if(route.params?.id) selected.value = route.params?.id
+    else selected.value = null
+  }, { immediate: true, deep: true });
+  // })
 </script>
 
 <template>
@@ -46,7 +65,6 @@
                     placeholder="Type to search ...">
           <font-awesome-icon icon="magnifying-glass" /> 
         </div>
-        <!-- <input type="text" placeholder="Type to search"> -->
         <div class="text-gray-500 cursor-pointer">
           <font-awesome-icon icon="circle-user" size="2xl"/> 
           <span class="px-4">Lorum ipsum</span>
@@ -56,8 +74,7 @@
         <h2 class="px-4 text-3xl text-gray-400">Products</h2>
         <hr class="mx-4"/>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5" v-if="selected === null">
-          <div class="card" v-for="(product, key) in productList" :key="product" @click="selected = key">
-            <!-- <figure style="background: url('@/assets/Mega Man Zero 2.png') no-repeat -1072px -193px;"></figure> -->
+          <div class="card" v-for="(product, key) in productList" :key="product" @click="selectProduct(key)">
             <img :src="image" alt="product" :style="`object-position: ${product.size}; object-fit: none; width: 240px; height:160px`">
             <!-- <img :src="`https://picsum.photos/200?random=${i}`" alt="Avatar" style="width:100%"> -->
             <div class="py-4">
@@ -68,7 +85,7 @@
         </div>
 
         <div class="space-y-4 px-4" v-if="selected || selected === 0">
-          <button class="text-gray-500 text-xl" @click="selected = null">
+          <button class="text-gray-500 text-xl" @click="selectProduct(null)">
             <font-awesome-icon icon="circle-left" size="xl"/> 
             Back
           </button>
