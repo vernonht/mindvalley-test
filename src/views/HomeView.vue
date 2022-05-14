@@ -48,13 +48,14 @@
 
 <template>
   <section class="flex w-screen h-screen">
-    <div class="w-72 sidebar">
+    <div class="md:w-72 sidebar">
       <div class="sidebar-logo">
-        Westeros
+        <span class="hidden md:block">Westeros</span>
+        <span class="md:hidden block">W</span>
       </div>
       <div class="sidebar-item" v-for="item in sidebarList" :key="item">
         <font-awesome-icon :icon="item.icon" /> 
-        <span class="px-4">{{item.name}}</span>
+        <span class="hidden md:block px-4">{{item.name}}</span>
       </div>
     </div>
     <div class="flex-1 bg-white overflow-auto">
@@ -67,13 +68,13 @@
         </div>
         <div class="text-gray-500 cursor-pointer">
           <font-awesome-icon icon="circle-user" size="2xl"/> 
-          <span class="px-4">Lorum ipsum</span>
+          <span class="hidden md:inline px-4">Lorum ipsum</span>
         </div>
       </header>
       <main class="p-8 space-y-4">
         <h2 class="px-4 text-3xl text-gray-400">Products</h2>
         <hr class="mx-4"/>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5" v-if="selected === null">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5" v-if="selected === null">
           <div class="card" v-for="(product, key) in productList" :key="product" @click="selectProduct(key)">
             <img :src="image" alt="product" :style="`object-position: ${product.size}; object-fit: none; width: 240px; height:160px`">
             <!-- <img :src="`https://picsum.photos/200?random=${i}`" alt="Avatar" style="width:100%"> -->
@@ -164,8 +165,8 @@ section {
   background-color: #ddd;
 }
 
-.input-icons i {
-    position: absolute;
+.input-icons svg {
+    cursor: pointer;
 }
   
 .input-icons {
